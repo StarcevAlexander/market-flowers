@@ -20,12 +20,16 @@
     *ngFor="let type of categoryWithTypes?.types"
   >
     <label class="catalog-filter-checkbox">
-      <input type="checkbox" />
+      <input
+        type="checkbox"
+        #input
+        (change)="updateFilterParam(type.url, input.checked)"
+      />
       <span>{{ type.name }}</span>
     </label>
   </div>
 
-  <div class="catalog-filter-from-to" *ngIf="type"  [class.open]="open">
+  <div class="catalog-filter-from-to" *ngIf="type" [class.open]="open">
     <div class="filters">
       <span>от</span>
       <input type="number" class="small-input" min="0" step="1" />

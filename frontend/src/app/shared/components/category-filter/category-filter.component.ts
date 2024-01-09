@@ -1,5 +1,7 @@
+import { Router } from '@angular/router';
 import { CategoryWithTypeType } from './../../../../types/category-with-type.type';
 import { Component, Input } from '@angular/core';
+import { ActiveParamsType } from 'src/types/active-params.type';
 
 @Component({
   selector: 'category-filter',
@@ -7,10 +9,13 @@ import { Component, Input } from '@angular/core';
   styleUrls: ['./category-filter.component.scss'],
 })
 export class CategoryFilterComponent {
+  constructor(private router: Router) {}
+
   @Input() categoryWithTypes: CategoryWithTypeType | null = null;
   @Input() type: string | null = null;
 
   open = false;
+  activeParams: ActiveParamsType = { types: [] };
 
   get title(): string {
     if (this.categoryWithTypes) {
@@ -27,5 +32,24 @@ export class CategoryFilterComponent {
 
   toggle(): void {
     this.open = !this.open;
+  }
+
+  updateFilterParam(url: string, checked: boolean) {
+    if (this.activeParams.types && this.activeParams.types.length > 0) {
+      const existingTypeInParams = this.activeParams.types.find(
+        (item) => item === url
+      );
+      if (existingTypeInParams && !checked) {
+        this.activeParams.types = this.activeParams.types.filter(
+          (item) => item !== url
+        );
+      } else if (!existingTypeInParams && checked) {
+        this.activeParams.types.push(url);
+      }
+    } else if (checked) {
+      this.activeParams.types = [url];
+    }
+
+    this.router.navigate(['/catalog'], { queryParams: this.activeParams });
   }
 }
