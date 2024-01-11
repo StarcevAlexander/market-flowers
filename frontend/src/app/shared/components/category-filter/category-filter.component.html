@@ -23,6 +23,7 @@
       <input
         type="checkbox"
         #input
+        [checked]="activeParams.types.includes(type.url)"
         (change)="updateFilterParam(type.url, input.checked)"
       />
       <span>{{ type.name }}</span>
@@ -32,9 +33,23 @@
   <div class="catalog-filter-from-to" *ngIf="type" [class.open]="open">
     <div class="filters">
       <span>от</span>
-      <input type="number" class="small-input" min="0" step="1" />
+      <input
+        type="number"
+        class="small-input"
+        min="0"
+        step="1"
+        [ngModel]="from"
+        (ngModelChange)="updateFilterParamFromTo(type + 'From', $event)"
+      />
       <span>до</span>
-      <input type="number" class="small-input" min="0" step="1" />
+      <input
+        type="number"
+        class="small-input"
+        min="0"
+        step="1"
+        [ngModel]="to"
+        (ngModelChange)="updateFilterParamFromTo(type + 'To', $event)"
+      />
       <span>см</span>
     </div>
   </div>

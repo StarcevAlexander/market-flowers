@@ -40,9 +40,12 @@
       }
       .catalog-sorting {
         font-size: 16px;
-        width: 257px;
+        width: 190px;
+        min-width: 190px;
         box-sizing: border-box;
         position: relative;
+        cursor: pointer;
+
         .catalog-sorting-head {
           display: flex;
           align-items: center;
@@ -75,6 +78,8 @@
           }
         }
         &.open {
+          width: 257px;
+          min-width: 257px;
           svg {
             rotate: 180deg;
           }
@@ -97,7 +102,6 @@
         width: 257px;
         min-width: 257px;
         margin-right: 58px;
-
       }
       .catalog-products {
         display: grid;
@@ -147,4 +151,3 @@
     }
   }
 }
-

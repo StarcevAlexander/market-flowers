@@ -4,9 +4,12 @@
 
     <div class="catalog-head">
       <div class="catalog-applied-filters">
-        <div class="catalog-applied-filter">
-          <span>Суккуленты</span>
-          <a>
+        <div
+          class="catalog-applied-filter"
+          *ngFor="let appliedFilter of appliedFilters"
+        >
+          <span>{{ appliedFilter.name }}</span>
+          <a (click)="removeAppliedFilter(appliedFilter)">
             <svg
               width="16"
               height="17"
@@ -37,7 +40,11 @@
         </div>
       </div>
 
-      <div class="catalog-sorting open">
+      <div
+        class="catalog-sorting open"
+        [class.open]="sortingOpen"
+        (click)="toggleSorting()"
+      >
         <div class="catalog-sorting-head">
           <span>Сортировать</span>
           <svg
@@ -54,16 +61,23 @@
           </svg>
         </div>
         <div class="catalog-sorting-body">
-          <div class="catalog-sorting-item">От А до Я</div>
-          <div class="catalog-sorting-item active">От Я до А</div>
-          <div class="catalog-sorting-item">По возрастанию цены</div>
-          <div class="catalog-sorting-item">По убыванию цены</div>
+          <div
+            class="catalog-sorting-item"
+            [class.active]="
+              this.activeParams.sort
+                ? this.activeParams.sort === sortingOption.value
+                : false
+            "
+            (click)="sort(sortingOption.value)"
+            *ngFor="let sortingOption of sortingOptions"
+          >
+            {{ sortingOption.name }}
+          </div>
         </div>
       </div>
     </div>
     <div class="catalog-layout">
       <div class="catalog-filters">
-
         <category-filter
           [categoryWithTypes]="categoryWithTypes"
           *ngFor="let categoryWithTypes of categoriesWithTypes"
