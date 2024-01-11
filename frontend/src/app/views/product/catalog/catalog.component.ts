@@ -7,6 +7,7 @@ import { CategoryWithTypeType } from '../../../../types/category-with-type.type'
 import { ActivatedRoute, Router } from '@angular/router';
 import { ActiveParamsUtil } from 'src/app/shared/utils/active-params.util';
 import { ActiveParamsType } from 'src/types/active-params.type';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-catalog',
@@ -27,6 +28,7 @@ export class CatalogComponent implements OnInit {
     { name: 'По убыванию цены', value: 'price-desc' },
   ];
 
+  pages: number[] = [];
   constructor(
     private productService: ProductService,
     private categotyService: CategoryService,
@@ -38,7 +40,10 @@ export class CatalogComponent implements OnInit {
     this.categotyService.getCategoriesWithTypes().subscribe((data) => {
       this.categoriesWithTypes = data;
 
-      this.activatedRoute.queryParams.subscribe((params) => {
+      this.activatedRoute.queryParams
+      .pipe(debounceTime(500))
+      .subscribe((params) => {
+
         this.activeParams = ActiveParamsUtil.processParams(params);
         this.appliedFilters = [];
 
@@ -80,11 +85,15 @@ export class CatalogComponent implements OnInit {
             urlParam: 'diameterTo',
           });
         }
-      });
-    });
 
-    this.productService.getProducts().subscribe((data) => {
-      this.products = data.items;
+        this.productService.getProducts(this.activeParams).subscribe((data) => {
+          this.pages = [];
+          for (let index = 1; index <= data.pages; index++) {
+            this.pages.push(index);
+          }
+          this.products = data.items;
+        });
+      });
     });
   }
 
@@ -101,6 +110,7 @@ export class CatalogComponent implements OnInit {
         (item) => item !== appliedFilter.urlParam
       );
     }
+    this.activeParams.page = 1;
     this.router.navigate(['/catalog'], { queryParams: this.activeParams });
   }
 
@@ -111,5 +121,22 @@ export class CatalogComponent implements OnInit {
   sort(value: string) {
     this.activeParams.sort = value;
     this.router.navigate(['/catalog'], { queryParams: this.activeParams });
+  }
+
+  openPage(page: number): void {
+    this.activeParams.page = page;
+    this.router.navigate(['/catalog'], { queryParams: this.activeParams });
+  }
+  openPrevPage() {
+    if (this.activeParams.page && this.activeParams.page > 1) {
+      this.activeParams.page--;
+      this.router.navigate(['/catalog'], { queryParams: this.activeParams });
+    }
+  }
+  openNextPage() {
+    if (this.activeParams.page && this.activeParams.page < this.pages.length) {
+      this.activeParams.page++;
+      this.router.navigate(['/catalog'], { queryParams: this.activeParams });
+    }
   }
 }

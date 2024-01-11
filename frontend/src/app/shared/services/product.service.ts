@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProductType } from 'src/types/product.type';
 import { environment } from '../../../environments/environment';
+import { ActiveParamsType } from 'src/types/active-params.type';
 
 @Injectable({
   providedIn: 'root',
@@ -14,7 +15,7 @@ export class ProductService {
     return this.http.get<ProductType[]>(environment.api + 'products/best');
   }
 
-  getProducts(): Observable<{
+  getProducts(params: ActiveParamsType): Observable<{
     totalCount: number;
     pages: number;
     items: ProductType[];
@@ -23,6 +24,6 @@ export class ProductService {
       totalCount: number;
       pages: number;
       items: ProductType[];
-    }>(environment.api + 'products');
+    }>(environment.api + 'products', { params: params });
   }
 }

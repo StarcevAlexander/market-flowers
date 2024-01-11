@@ -102,7 +102,7 @@ export class CategoryFilterComponent implements OnInit {
     } else if (checked) {
       this.activeParams.types = [url];
     }
-
+    this.activeParams.page = 1;
     this.router.navigate(['/catalog'], { queryParams: this.activeParams });
   }
 
