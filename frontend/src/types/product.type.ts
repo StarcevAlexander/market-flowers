@@ -1,4 +1,5 @@
 export type ProductType = {
+  humidity?: string;
   id: string;
   name: string;
   price: number;
