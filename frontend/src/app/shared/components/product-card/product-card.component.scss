@@ -51,18 +51,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    .product-card-count {
-      width: 97px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      div {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        cursor: pointer;
-      }
-    }
+
     .product-card-detail {
       display: flex;
       align-items: center;

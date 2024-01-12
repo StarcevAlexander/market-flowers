@@ -14,6 +14,7 @@ export class DetailComponent implements OnInit {
   recomendedProducts: ProductType[] = [];
   product!: ProductType;
   serverStaticPath = environment.serverStaticPath;
+  count: number = 1;
   constructor(
     private productService: ProductService,
     private activatedRoute: ActivatedRoute
@@ -31,6 +32,14 @@ export class DetailComponent implements OnInit {
     this.productService.getBestProducts().subscribe((data: ProductType[]) => {
       this.recomendedProducts = data;
     });
+  }
+
+  updateCount(value: number) {
+    this.count = value
+  }
+
+  addToCart() {
+    alert('в корзине товаров: ' + this.count);
   }
 
   customOptions: OwlOptions = {
