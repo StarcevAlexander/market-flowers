@@ -1,14 +1,13 @@
 @import "../../../../assets/styles/variables";
+@import "../../../../assets/styles/mixins";
 
 .catalog {
   padding-top: 100px;
   padding-bottom: 110px;
   .container {
     .catalog-title {
+      @include head-lora-36;
       color: $green-text-color;
-      font-family: "Lora", sans-serif;
-      font-size: 36px;
-      font-weight: 400;
       margin-bottom: 33px;
       margin-left: 317px;
     }
@@ -108,8 +107,8 @@
         grid-template-columns: repeat(3, 1fr);
         gap: 26px 30px;
       }
-      h2{
-        color: red
+      h2 {
+        color: red;
       }
     }
     .pagination {

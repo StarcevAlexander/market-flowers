@@ -52,6 +52,19 @@ body {
     background: gray;
     cursor: not-allowed;
   }
+  &.button-transparent {
+    background-color: transparent;
+    border: 1px solid #6cac72;
+    color: $green-text-color;
+  }
+  &.button-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    span {
+      margin-left: 16px;
+    }
+  }
 }
 
 a.button {
