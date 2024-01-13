@@ -9,6 +9,7 @@ import { environment } from '../../../../environments/environment.production';
 })
 export class ProductCardComponent implements OnInit {
   @Input() product!: ProductType;
+  @Input() isLight: boolean = false;
   serverStaticPath = environment.serverStaticPath;
   count: number = 1;
   constructor() {}

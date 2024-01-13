@@ -1,5 +1,9 @@
-<div class="product-card" *ngIf="product">
-  <div class="product-card-favorite">
+<div
+  class="product-card"
+  *ngIf="product"
+  [routerLink]="isLight ? ['/product/' + product.url] : []" [class.is-light]="isLight"
+>
+  <div class="product-card-favorite" *ngIf="!isLight">
     <!-- <span
       ><svg
         width="24"
@@ -40,15 +44,14 @@
   ></div>
   <div class="product-card-name">{{ product.name }}</div>
 
-  <div class="product-card-info">
+  <div class="product-card-info" *ngIf="!isLight">
     <div class="product-card-price">{{ product.price }} РУБ</div>
     <div class="product-card-action">
       <button class="button">В корзину</button>
     </div>
   </div>
 
-  <div class="product-card-extra">
-
+  <div class="product-card-extra" *ngIf="!isLight">
     <count-selector></count-selector>
 
     <a [routerLink]="'/product/' + product.url" class="product-card-detail"

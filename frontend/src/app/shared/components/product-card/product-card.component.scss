@@ -5,6 +5,14 @@
   height: 498px;
   box-sizing: border-box;
   position: relative;
+
+  &.is-light {
+    height: auto;
+    cursor: pointer;
+  }
+  :hover {
+    scale: 1.01;
+  }
   .product-card-favorite {
     position: absolute;
     top: 12px;
