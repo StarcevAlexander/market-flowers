@@ -1,7 +1,11 @@
 <div class="cart" *ngIf="cart">
   <div class="container">
     <div class="cart-title">Корзина</div>
-    <div class="cart-info">
+    <div class="cart-empty" *ngIf="!cart || cart.items.length === 0">
+      <div>В корзине нет товара</div>
+      <button class="button" routerLink="/catalog">Перейти в каталог</button>
+    </div>
+    <div class="cart-info" *ngIf="cart && cart.items.length > 0">
       <div class="cart-products">
         <div class="cart-product" *ngFor="let cartProduct of cart.items">
           <div
