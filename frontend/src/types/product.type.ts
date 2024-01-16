@@ -1,5 +1,5 @@
 export type ProductType = {
-  humidity?: string;
+  humidity: string;
   id: string;
   name: string;
   price: number;
@@ -14,4 +14,5 @@ export type ProductType = {
     name: string;
     url: string;
   };
+  countInCart?: number;
 };
