@@ -86,10 +86,10 @@
               <a routerLink="/profile">Профиль</a>
             </button>
             <button mat-menu-item>
-              <span (click)="logout()">Вы йти</span>
+              <span (click)="logout()">Выйти</span>
             </button>
           </mat-menu>
-          <a href="#">
+          <a routerLink="/favorite">
             <svg
               width="24"
               height="24"
@@ -136,7 +136,7 @@
                 fill="#202B21"
               />
             </svg>
-            <span>{{count}}</span>
+            <span>{{ count }}</span>
           </a>
         </div>
       </div>
