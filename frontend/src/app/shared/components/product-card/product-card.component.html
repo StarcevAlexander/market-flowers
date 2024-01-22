@@ -1,11 +1,15 @@
 <div
   class="product-card"
   *ngIf="product"
-  [routerLink]="isLight ? ['/product/' + product.url] : []"
+(click)="navigate()"
   [class.is-light]="isLight"
 >
-  <div class="product-card-favorite" *ngIf="!isLight">
-    <!-- <span
+  <div
+    class="product-card-favorite"
+    *ngIf="!isLight"
+    (click)="updateFavorite()"
+  >
+    <span *ngIf="product.isInFavorite"
       ><svg
         width="24"
         height="24"
@@ -22,8 +26,8 @@
           fill="#B6D5B9"
         />
       </svg>
-    </span> -->
-    <span>
+    </span>
+    <span *ngIf="!product.isInFavorite">
       <svg
         width="24"
         height="24"
@@ -63,13 +67,10 @@
   </div>
 
   <div class="product-card-extra" *ngIf="!isLight">
-
-
     <count-selector
       [count]="count"
       (onCountChange)="updateCount($event)"
     ></count-selector>
-
 
     <a [routerLink]="'/product/' + product.url" class="product-card-detail"
       ><svg

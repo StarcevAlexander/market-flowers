@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { ProductType } from 'src/types/product.type';
-import { environment } from '../../../environments/environment';
+import { environment } from '../../../environments/environment.production';
 import { ActiveParamsType } from 'src/types/active-params.type';
 
 @Injectable({
@@ -30,5 +30,4 @@ export class ProductService {
   getProduct(url: string): Observable<ProductType> {
     return this.http.get<ProductType>(environment.api + 'products/' + url);
   }
-
 }

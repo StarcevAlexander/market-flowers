@@ -5,6 +5,8 @@ import { AuthService } from 'src/app/core/auth/auth.service';
 import { CategoryWithTypeType } from 'src/types/category-with-type.type';
 import { CartService } from '../../services/cart.service';
 import { Subject } from 'rxjs';
+import { DefaultResponseType } from 'src/types/default-response.type';
+import { CartType } from 'src/types/cart.type';
 
 @Component({
   selector: 'app-header',
@@ -29,9 +31,14 @@ export class HeaderComponent implements OnInit {
     this.authService.isLogged$.subscribe((isLoggedIn: boolean) => {
       this.isLogged = isLoggedIn;
     });
-    this.cartService.getCartCount().subscribe((data) => {
-      this.count = data.count;
-    });
+    this.cartService
+      .getCartCount()
+      .subscribe((data: { count: number } | DefaultResponseType) => {
+        if ((data as DefaultResponseType).error !== undefined) {
+          throw new Error((data as DefaultResponseType).message);
+        }
+        this.count = (data as { count: number }).count;
+      });
 
     this.cartService.count$.subscribe((count) => {
       this.count = count;

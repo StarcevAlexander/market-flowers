@@ -10,6 +10,7 @@ import { ActiveParamsType } from 'src/types/active-params.type';
 import { debounceTime } from 'rxjs';
 import { CartService } from 'src/app/shared/services/cart.service';
 import { CartType } from '../../../../types/cart.type';
+import { DefaultResponseType } from 'src/types/default-response.type';
 
 @Component({
   selector: 'app-catalog',
@@ -41,9 +42,14 @@ export class CatalogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.cartService.getCart().subscribe((data: CartType) => {
-      this.cart = data;
-    });
+    this.cartService
+      .getCart()
+      .subscribe((data: CartType | DefaultResponseType) => {
+        if ((data as DefaultResponseType).error !== undefined) {
+          throw new Error((data as DefaultResponseType).message);
+        }
+        this.cart = data as CartType;
+      });
 
     this.categotyService.getCategoriesWithTypes().subscribe((data) => {
       this.categoriesWithTypes = data;

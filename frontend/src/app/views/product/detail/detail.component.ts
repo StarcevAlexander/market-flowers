@@ -1,3 +1,4 @@
+import { DefaultResponseType } from './../../../../types/default-response.type';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { OwlOptions } from 'ngx-owl-carousel-o';
@@ -6,6 +7,10 @@ import { ProductType } from 'src/types/product.type';
 import { environment } from '../../../../environments/environment.production';
 import { CartType } from 'src/types/cart.type';
 import { CartService } from 'src/app/shared/services/cart.service';
+import { FavoriteService } from 'src/app/shared/services/favorite.service';
+import { FavoriteType } from 'src/types/favorite.type';
+import { AuthService } from '../../../core/auth/auth.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-detail',
@@ -21,6 +26,9 @@ export class DetailComponent implements OnInit {
   constructor(
     private productService: ProductService,
     private cartService: CartService,
+    private favoriteService: FavoriteService,
+    private authService: AuthService,
+    private _snackBar: MatSnackBar,
     private activatedRoute: ActivatedRoute
   ) {}
 
@@ -29,18 +37,44 @@ export class DetailComponent implements OnInit {
       this.productService
         .getProduct(params['url'])
         .subscribe((data: ProductType) => {
-          this.cartService.getCart().subscribe((cartData: CartType) => {
-            if (cartData) {
-              const productInCart = cartData.items.find(
-                (item) => item.product.id == data.id
-              );
-              if (productInCart) {
-                data.countInCart = productInCart.quantity;
-                this.count = data.countInCart;
+          this.product = data;
+
+          this.cartService
+            .getCart()
+            .subscribe((cartData: CartType | DefaultResponseType) => {
+              if ((cartData as DefaultResponseType).error !== undefined) {
+                throw new Error((cartData as DefaultResponseType).message);
               }
-            }
-            this.product = data;
-          });
+
+              const cartDataResponse = cartData as CartType;
+              if (cartDataResponse) {
+                const productInCart = cartDataResponse.items.find(
+                  (item) => item.product.id == this.product.id
+                );
+                if (productInCart) {
+                  this.product.countInCart = productInCart.quantity;
+                  this.count = this.product.countInCart;
+                }
+              }
+            });
+
+          this.favoriteService
+            .getFavorites()
+            .subscribe((data: FavoriteType[] | DefaultResponseType) => {
+              if ((data as DefaultResponseType).error !== undefined) {
+                const error = (data as DefaultResponseType).message;
+                throw new Error(error);
+              }
+
+              const products = data as FavoriteType[];
+
+              const currentProductExists = products.find(
+                (item) => item.id === this.product.id
+              );
+              if (currentProductExists) {
+                this.product.isInFavorite = true;
+              }
+            });
         });
     });
 
@@ -54,7 +88,7 @@ export class DetailComponent implements OnInit {
     if (this.product.countInCart) {
       this.cartService
         .updateCart(this.product.id, this.count)
-        .subscribe((data: CartType) => {
+        .subscribe((data: CartType | DefaultResponseType) => {
           this.product.countInCart = this.count;
         });
     }
@@ -63,7 +97,7 @@ export class DetailComponent implements OnInit {
   addToCart() {
     this.cartService
       .updateCart(this.product.id, this.count)
-      .subscribe((data: CartType) => {
+      .subscribe((data: CartType | DefaultResponseType) => {
         this.product.countInCart = this.count;
       });
   }
@@ -72,6 +106,34 @@ export class DetailComponent implements OnInit {
     this.cartService.updateCart(this.product.id, 0).subscribe();
     this.product.countInCart = 0;
     this.count = 1;
+  }
+
+  updateFavorite() {
+    if (!this.authService.getIsLoggedIn) {
+      this._snackBar.open('Для добавления в избранное нужно авторизоваться');
+      return;
+    }
+
+    if (this.product.isInFavorite) {
+      this.favoriteService
+        .removeFavorite(this.product.id)
+        .subscribe((data: DefaultResponseType) => {
+          if (data.error) {
+            ///./
+            throw new Error(data.message);
+          }
+          this.product.isInFavorite = false;
+        });
+    } else {
+      this.favoriteService
+        .addFavorite(this.product.id)
+        .subscribe((data: FavoriteType[] | DefaultResponseType) => {
+          if ((data as DefaultResponseType).error !== undefined) {
+            throw new Error((data as DefaultResponseType).message);
+          }
+          this.product.isInFavorite = true;
+        });
+    }
   }
 
   customOptions: OwlOptions = {
