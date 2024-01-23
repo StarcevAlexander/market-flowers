@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { CartService } from 'src/app/shared/services/cart.service';
 import { CartType } from 'src/types/cart.type';
 import { DefaultResponseType } from 'src/types/default-response.type';
 import { DeliveryType } from 'src/types/delivery.type';
+import { PaymentType } from 'src/types/payment.type';
 
 @Component({
   selector: 'app-order',
@@ -17,12 +19,30 @@ export class OrderComponent implements OnInit {
   totalCount: number = 0;
   deliveryType: DeliveryType = DeliveryType.delivery;
   deliveryTypes = DeliveryType;
+  paymentTypes = PaymentType;
+
+  orderForm = this.fb.group({
+    firstName: ['', Validators.required],
+    lastName: ['', Validators.required],
+    phone: ['', Validators.required],
+    fatherName: [''],
+    paymentType: [PaymentType.cashToCourier, Validators.required],
+    email: ['', [Validators.required, Validators.email]],
+    street: [''],
+    house: [''],
+    entrance: [''],
+    apartment: [''],
+    comment: [''],
+  });
 
   constructor(
     private cartService: CartService,
     private router: Router,
-    private _snackBar: MatSnackBar
-  ) {}
+    private _snackBar: MatSnackBar,
+    private fb: FormBuilder
+  ) {
+    this.updateDeliveryTypeValidation();
+  }
   ngOnInit() {
     this.cartService
       .getCart()
@@ -51,5 +71,29 @@ export class OrderComponent implements OnInit {
   }
   changeDeliveryType(type: DeliveryType) {
     this.deliveryType = type;
+    this.updateDeliveryTypeValidation();
+  }
+
+  updateDeliveryTypeValidation() {
+    if (this.deliveryType == DeliveryType.delivery) {
+      this.orderForm.get('street')?.setValidators(Validators.required);
+      this.orderForm.get('house')?.setValidators(Validators.required);
+    } else {
+      this.orderForm.get('street')?.removeValidators(Validators.required);
+      this.orderForm.get('house')?.removeValidators(Validators.required);
+      this.orderForm.get('street')?.setValue('');
+      this.orderForm.get('house')?.setValue('');
+      this.orderForm.get('entrance')?.setValue('');
+      this.orderForm.get('apartment')?.setValue('');
+    }
+    this.orderForm.get('street')?.updateValueAndValidity();
+    this.orderForm.get('house')?.updateValueAndValidity();
+    this.orderForm.get('entrance')?.updateValueAndValidity();
+    this.orderForm.get('apartment')?.updateValueAndValidity();
+  }
+
+  createOrder() {
+    if (this.orderForm.valid) console.log(this.orderForm.value);
+    else alert(123);
   }
 }
