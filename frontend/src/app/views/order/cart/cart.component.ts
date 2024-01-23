@@ -15,8 +15,15 @@ import { DefaultResponseType } from 'src/types/default-response.type';
 export class CartComponent implements OnInit {
   constructor(
     private productService: ProductService,
-    private cartService: CartService
+    private cartService: CartService,
+
   ) {}
+
+  extraProducts: ProductType[] = [];
+  cart: CartType | null = null;
+  serverStaticPath = environment.serverStaticPath;
+  totalAmount: number = 0;
+  totalCount: number = 0;
 
   ngOnInit(): void {
     this.productService.getBestProducts().subscribe((data: ProductType[]) => {
@@ -30,6 +37,7 @@ export class CartComponent implements OnInit {
           throw new Error((data as DefaultResponseType).message);
         }
         this.cart = data as CartType;
+
         this.calculateTotal();
       });
   }
@@ -47,21 +55,17 @@ export class CartComponent implements OnInit {
 
   updateCount(id: string, count: number) {
     if (this.cart) {
-      this.cartService.updateCart(id, count).subscribe((data: CartType | DefaultResponseType) => {
-        if ((data as DefaultResponseType).error !== undefined) {
-          throw new Error((data as DefaultResponseType).message);
-        }
-        this.cart = data as CartType;
-        this.calculateTotal();
-      });
+      this.cartService
+        .updateCart(id, count)
+        .subscribe((data: CartType | DefaultResponseType) => {
+          if ((data as DefaultResponseType).error !== undefined) {
+            throw new Error((data as DefaultResponseType).message);
+          }
+          this.cart = data as CartType;
+          this.calculateTotal();
+        });
     }
   }
-
-  extraProducts: ProductType[] = [];
-  cart: CartType | null = null;
-  serverStaticPath = environment.serverStaticPath;
-  totalAmount: number = 0;
-  totalCount: number = 0;
 
   customOptions: OwlOptions = {
     loop: true,
