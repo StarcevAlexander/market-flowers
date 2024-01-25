@@ -5,17 +5,10 @@ import { PersonalRoutingModule } from './personal-routing.module';
 import { FavoriteComponent } from './favorite/favorite.component';
 import { InfoComponent } from './info/info.component';
 import { OrdersComponent } from './orders/orders.component';
-
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
-  declarations: [
-    FavoriteComponent,
-    InfoComponent,
-    OrdersComponent
-  ],
-  imports: [
-    CommonModule,
-    PersonalRoutingModule
-  ]
+  declarations: [FavoriteComponent, InfoComponent, OrdersComponent],
+  imports: [CommonModule, PersonalRoutingModule, ReactiveFormsModule],
 })
-export class PersonalModule { }
+export class PersonalModule {}

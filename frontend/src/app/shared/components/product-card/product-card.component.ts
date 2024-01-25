@@ -93,7 +93,6 @@ export class ProductCardComponent implements OnInit {
         .removeFavorite(this.product.id)
         .subscribe((data: DefaultResponseType) => {
           if (data.error) {
-            ///./
             throw new Error(data.message);
           }
           this.product.isInFavorite = false;
