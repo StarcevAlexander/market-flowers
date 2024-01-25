@@ -3,17 +3,21 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, Subject, tap } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import { DefaultExport } from '@angular/router';
 import { DefaultResponseType } from 'src/types/default-response.type';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CartService {
-  count: number = 0;
+  private count: number = 0;
   count$: Subject<number> = new Subject<number>();
 
   constructor(private http: HttpClient) {}
+
+  setCount(count: number) {
+    this.count = count;
+    this.count$.next(this.count);
+  }
 
   getCart(): Observable<CartType | DefaultResponseType> {
     return this.http.get<CartType | DefaultResponseType>(
@@ -35,8 +39,7 @@ export class CartService {
       .pipe(
         tap((data) => {
           if (!data.hasOwnProperty('error')) {
-            this.count = (data as { count: number }).count;
-            this.count$.next(this.count);
+            this.setCount((data as { count: number }).count);
           }
         })
       );
@@ -60,11 +63,11 @@ export class CartService {
       .pipe(
         tap((data) => {
           if (!data.hasOwnProperty('error')) {
-            this.count = 0;
+            let count = 0;
             (data as CartType).items.forEach((item) => {
-              this.count += item.quantity;
+              count += item.quantity;
             });
-            this.count$.next(this.count);
+            this.setCount(count);
           }
         })
       );
