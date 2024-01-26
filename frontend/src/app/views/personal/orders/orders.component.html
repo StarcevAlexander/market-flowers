@@ -3,7 +3,7 @@
     <div class="personal-title">Личный кабинет</div>
 
     <div class="personal-pages-selector">
-      <div class="personal-page" routerLink="/info">Личные данные</div>
+      <div class="personal-page" routerLink="/profile">Личные данные</div>
       <div class="personal-page active">Ваши заказы</div>
     </div>
 
@@ -35,7 +35,12 @@
           </table>
         </div>
 
-        <div class="orders-list-item-status">{{ order.status }}</div>
+        <div
+          class="orders-list-item-status"
+          style="border-color: {{ order.color }}; color: {{ order.color }}"
+        >
+          {{ order.statusRus }}
+        </div>
 
         <div class="orders-list-item-price">{{ order.totalAmount }} РУБ</div>
       </div>
