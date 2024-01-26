@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable} from 'rxjs';
+import { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
 import { DefaultResponseType } from 'src/types/default-response.type';
 import { OrderType } from 'src/types/order.type';
@@ -18,6 +18,12 @@ export class OrderService {
       {
         withCredentials: true,
       }
+    );
+  }
+
+  getOrders(): Observable<OrderType[] | DefaultResponseType> {
+    return this.http.get<OrderType[] | DefaultResponseType>(
+      environment.api + 'orders'
     );
   }
 }

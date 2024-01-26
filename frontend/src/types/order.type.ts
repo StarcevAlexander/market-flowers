@@ -1,4 +1,5 @@
 import { DeliveryType } from './delivery.type';
+import { OrderStatusType } from './order-status.type';
 import { PaymentType } from './payment.type';
 
 export type OrderType = {
@@ -15,9 +16,12 @@ export type OrderType = {
   apartment?: string;
   comment?: string;
   items?: {
+    name: string;
     id: string;
     quantity: number;
     price: number;
     total: number;
   }[];
+  totalAmount?: number;
+  status?: OrderStatusType;
 };
