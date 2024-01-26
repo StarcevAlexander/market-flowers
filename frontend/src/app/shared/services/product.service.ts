@@ -30,4 +30,12 @@ export class ProductService {
   getProduct(url: string): Observable<ProductType> {
     return this.http.get<ProductType>(environment.api + 'products/' + url);
   }
+
+  searchProducts(query: string): Observable<{
+    items: ProductType[];
+  }> {
+    return this.http.get<{ items: ProductType[] }>(
+      environment.api + 'products/search?query=' + query
+    );
+  }
 }

@@ -16,6 +16,7 @@ import {
 import { SharedModule } from './shared/shared.module';
 import { CarouselModule } from 'ngx-owl-carousel-o';
 import { AuthInterceptor } from './core/auth/auth.interceptor';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,8 @@ import { AuthInterceptor } from './core/auth/auth.interceptor';
     AppRoutingModule,
     BrowserAnimationsModule,
     MatMenuModule,
+    ReactiveFormsModule,
+    FormsModule,
     CarouselModule,
   ],
   providers: [

@@ -35,14 +35,19 @@ const routes: Routes = [
           import('./views/personal/personal.module').then(
             (m) => m.PersonalModule
           ),
-          canActivate: [authGuard],
+        canActivate: [authGuard],
       },
     ],
   },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      anchorScrolling: 'enabled',
+      scrollPositionRestoration: 'enabled',
+    }),
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

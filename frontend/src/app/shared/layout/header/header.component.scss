@@ -128,6 +128,52 @@ header.header {
         left: 15px;
         top: 11px;
       }
+
+      .search-products {
+        position: absolute;
+        right: 0;
+        top: 61px;
+        width: 400px;
+        background-color: #ffffff;
+        border-radius: 5px;
+        border: 1px solid #ebebeb;
+        .search-product {
+          padding: 12px 23px;
+          display: flex;
+          align-items: center;
+          cursor: pointer;
+          background-color: #ffffff;
+
+          &:first-child {
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+          }
+          &:last-child {
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+          }
+
+          &:hover {
+            background-color: #ebebeb;
+            .search-product-name {
+              color: #000;
+            }
+          }
+          .search-product-image {
+            width: 40px;
+            height: 40px;
+            border-radius: 5px;
+            margin-right: 25px;
+            background-position: center;
+            background-size: cover;
+          }
+          .search-product-name {
+            color: #8e8e8e;
+            font-size: 16px;
+            line-height: 130%;
+          }
+        }
+      }
     }
   }
 }
